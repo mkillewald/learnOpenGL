@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+      {
+          "label": "C/C++: clang++ build active file",
+          "type": "shell",
+          "command": "clang++",
+          "args": [
+              "-x",
+              "c++",
+              "-std=c++17",
+              "-stdlib=libc++",
+              "-lglfw",
+              "-framework",
+              "CoreVideo",
+              "-framework",
+              "OpenGL",
+              "-framework",
+              "IOKit",
+              "-framework",
+              "Cocoa",
+              "-framework",
+              "Carbon",
+              "twoTriangles.cpp",
+              "glad.c",
+              "-o",
+              "twoTriangles",
+              "--debug"
+          ],
+          "group": {
+              "kind": "build",
+              "isDefault": true
+          }
+      }
+  ]
+}
