@@ -24,7 +24,7 @@
               "twoTriangles.cpp",
               "glad.c",
               "-o",
-              "twoTriangles",
+              "bin/twoTriangles",
               "--debug"
           ],
           "group": {

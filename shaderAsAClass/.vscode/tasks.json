@@ -24,7 +24,7 @@
               "shaderAsAClass.cpp",
               "glad.c",
               "-o",
-              "shaderAsAClass",
+              "bin/shaderAsAClass",
               "--debug"
           ],
           "group": {

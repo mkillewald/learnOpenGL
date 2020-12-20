@@ -24,7 +24,7 @@
               "hellotriangle.cpp",
               "glad.c",
               "-o",
-              "hellotriangle",
+              "bin/hellotriangle",
               "--debug"
           ],
           "group": {
