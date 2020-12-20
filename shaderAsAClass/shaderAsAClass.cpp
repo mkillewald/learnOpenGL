@@ -102,6 +102,7 @@ int main()
 
         // render triangle 
         ourShader.use();
+        ourShader.setFloat("horizOffs", 0.5f);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
  
