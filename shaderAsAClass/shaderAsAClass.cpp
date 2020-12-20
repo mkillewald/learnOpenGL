@@ -47,7 +47,7 @@ int main()
 
     // build and compile our shader program using the Shader class
     // -----------------------------------------------------------
-    Shader ourShader("3.3.shader.vert", "3.3.shader.frag");
+    Shader ourShader("../3.3.shader.vert", "../3.3.shader.frag"); // paths relative to binary at run time
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
