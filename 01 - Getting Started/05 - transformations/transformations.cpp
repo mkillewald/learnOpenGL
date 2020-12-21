@@ -149,15 +149,9 @@ int main()
     }
     stbi_image_free(data);
 
-    // create a transformation matrix to scale and rotate
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));  
-
     ourShader.use(); // activate the shader before setting uniforms!  
     glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
     glUniform1i(glGetUniformLocation(ourShader.ID, "texture2"), 1);
-    glUniformMatrix4fv(glGetUniformLocation(ourShader.ID, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
 
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
@@ -187,8 +181,23 @@ int main()
         glActiveTexture(GL_TEXTURE1); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, texture2);
 
+        // create a transformation matrix to translate and rotate container
+
+        /*  
+         *  Here we first rotate the container around the origin (0,0,0) and once it's rotated, we translate its rotated version to the bottom-right
+         *  corner of the screen. Remember that the actual transformation order should be read in reverse: even though in code we first translate and 
+         *  then later rotate, the actual transformations first apply a rotation and then a translation. Understanding all these combinations of
+         *  transformations and how they apply to objects is difficult to understand. Try and experiment with transformations like these and you'll
+         *  quickly get a grasp of it.
+         */
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
         // render container
         ourShader.use();
+        glUniformMatrix4fv(glGetUniformLocation(ourShader.ID, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
         glBindVertexArray(VAO);
         
         // using indexed drawing
