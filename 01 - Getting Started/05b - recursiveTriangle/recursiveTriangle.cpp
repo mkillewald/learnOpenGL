@@ -14,8 +14,8 @@ void processInput(GLFWwindow *window, float *mixPct);
 void recursiveTransform(unsigned int transformLoc, glm::vec3 translate, glm::mat4 transMatrix, int depth);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 800;
+unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
@@ -52,7 +52,7 @@ int main()
 
     // build and compile our shader program using the Shader class
     // -----------------------------------------------------------
-    Shader ourShader("../resources/shaders/3.3.shader.vert", "../resources/shaders/3.3.shader.frag");  // paths relative to binary at run time
+    Shader ourShader("../resources/shaders/3.3.shader.vert", "../resources/shaders/3.3.smiley.frag");  // paths relative to binary at run time
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------ 
@@ -61,7 +61,7 @@ int main()
         // positions          // colors           // texture coords
          -1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   -0.5f, 1.05f, // Point A top left
          1.0f,   1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.5f, 1.05f, // Point B top right
-         0.0f,  -1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   0.5f, -0.55f, // Point C bottom  
+         0.0f,  -1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   0.5f, -0.5f, // Point C bottom  
     };
 
     unsigned int indices[] = {  // note that we start from 0!
@@ -126,54 +126,32 @@ int main()
     }
     stbi_image_free(data);
 
-    // texture 2
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2); 
-
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // load and generate the texture
-    data = stbi_load("../resources/textures/awesomeface.png", &width, &height, &nrChannels, 0);  // path relative to binary at run time
-    if (data)
-    {
-        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture2" << std::endl;
-    }
-    stbi_image_free(data);
-
     float mixPct = 0.3f;
     glm::vec4 clearColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
 
     ourShader.use(); // activate the shader before setting uniforms!
-    ourShader.setFloat("mixPct", mixPct);
-    ourShader.setVec4("clearColor", clearColor);
-    glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
-    glUniform1i(glGetUniformLocation(ourShader.ID, "texture2"), 1);
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    // glBindVertexArray(0);
-
-    // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    ourShader.setFloat("u_mixPct", mixPct);
+    ourShader.setVec4("u_clearColor", clearColor);
+    glUniform1i(glGetUniformLocation(ourShader.ID, "u_texture1"), 0);
 
     // render loop
     // -----------
-    
+    double xpos, ypos;
+
     while (!glfwWindowShouldClose(window))
     {
         // input
         // -----
         processInput(window, &mixPct);
-        ourShader.setFloat("mixPct", mixPct);
+        ourShader.setFloat("u_mixPct", mixPct);
+        ourShader.setFloat("u_time", glfwGetTime());
+        ourShader.setVec2("u_resolution", glm::vec2(SCR_WIDTH, SCR_HEIGHT));
+        
+        glfwGetCursorPos(window, &xpos, &ypos);
+        glm::vec2 u_mouse = glm::vec2(xpos, ypos) / glm::vec2(SCR_WIDTH, SCR_HEIGHT); // normalixe to window size and origin is at top left
+        u_mouse -= 0.5; // orign now at center
+        u_mouse.y = -u_mouse.y; //invert y
+        ourShader.setVec2("u_mouse", u_mouse);
 
         // render
         // ------
@@ -188,8 +166,8 @@ int main()
 
         // transform and draw
         glBindVertexArray(VAO);
-        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        recursiveTransform(transformLoc, glm::vec3(0.0f, -0.5f, 0.0f), glm::mat4(1.0f), 7);
+        unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "u_transform");
+        recursiveTransform(transformLoc, glm::vec3(0.0f, -0.5f, 0.0f), glm::mat4(1.0f), 8);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -229,6 +207,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+    glfwGetWindowSize(window, (int*)&SCR_WIDTH, (int*)&SCR_HEIGHT);
 }
 
 void recursiveTransform(unsigned int transformLoc, glm::vec3 translate, glm::mat4 matrix, int depth) {
@@ -242,8 +221,7 @@ void recursiveTransform(unsigned int transformLoc, glm::vec3 translate, glm::mat
 
     --depth;
     recursiveTransform(transformLoc, glm::vec3(0.0f, 1.5f, 0.0f), matrix, depth);  // top 
-    recursiveTransform(transformLoc, glm::vec3(-1.0f, -0.5f, 0.0f), matrix, depth);  // left     `
+    recursiveTransform(transformLoc, glm::vec3(-1.0f, -0.5f, 0.0f), matrix, depth);  // left side
     matrix = glm::scale(matrix, glm::vec3(-1.0f,1.0f,1.0f));  // flip matrix on x to reverse our texture
-    recursiveTransform(transformLoc, glm::vec3(-1.0f, -0.5f, 0.0f), matrix, depth); // right (same translation vector is used since matrix was flipped)
-    
+    recursiveTransform(transformLoc, glm::vec3(-1.0f, -0.5f, 0.0f), matrix, depth); // right side (same translation vector is used since matrix was flipped)
 }

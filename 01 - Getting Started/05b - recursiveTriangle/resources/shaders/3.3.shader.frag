@@ -4,14 +4,15 @@ out vec4 FragColor;
 in vec3 ourColor;
 in vec2 TexCoord;
 
-uniform vec4 clearColor;
-uniform float mixPct;
-uniform sampler2D texture1;
-uniform sampler2D texture2;
+uniform vec4 u_clearColor;
+uniform float u_mixPct;
+uniform sampler2D u_texture1;
+uniform sampler2D u_texture2;
 
 void main()
-{   vec4 container = texture(texture1, TexCoord);
-    vec4 smiley = texture(texture2, TexCoord);
-    FragColor = mix(clearColor, container, mixPct);
+{   
+    vec4 container = texture(u_texture1, TexCoord);
+    vec4 smiley = texture(u_texture2, TexCoord);
+    FragColor = mix(u_clearColor, container, u_mixPct);
     FragColor = mix(FragColor, smiley, smiley.a);
 }
