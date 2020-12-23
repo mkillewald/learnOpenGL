@@ -1,7 +1,7 @@
 # learnOpenGL
 working through an OpenGL tutorial https://learnopengl.com/
 
-Uses the following third party libraries:
+### Uses the following third party libraries:
 
 GLFW 3.3.2 
 https://www.glfw.org/
