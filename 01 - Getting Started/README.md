@@ -5,6 +5,7 @@
 ![twoTriangles](https://github.com/mkillewald/learnOpenGL/blob/main/images/twoTriangles.png)
 
 ### 03 - shaderAsAClass   
+![shaderAsAClass](https://github.com/mkillewald/learnOpenGL/blob/main/images/shaderAsAClass.png)
 
 ### 04 - textures   
 
