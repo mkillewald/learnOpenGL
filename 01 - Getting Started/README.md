@@ -14,4 +14,6 @@
 ![transformations](https://github.com/mkillewald/learnOpenGL/blob/main/images/transformations.gif)
 
 ### 05b - recursiveTriangle
+![recursiveTriange](https://github.com/mkillewald/learnOpenGL/blob/main/images/recursiveTriangle.gif)
+
 
