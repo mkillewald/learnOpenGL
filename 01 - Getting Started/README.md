@@ -21,8 +21,8 @@ An experiment with recursion and matrix manipulation. For a great tutorial on cr
 ![spacer28](https://github.com/mkillewald/learnOpenGL/blob/main/images/spacer28.png) 
 ![recursiveTriange400](https://github.com/mkillewald/learnOpenGL/blob/main/images/recursiveTriangle400.gif)   
 <br/><br/>
-### [06 - coordinateSystems](https://github.com/mkillewald/learnOpenGL/tree/main/01%20-%20Getting%20Started/056%20-%20coordinateSystems)   
+### [06 - coordinateSystems](https://github.com/mkillewald/learnOpenGL/tree/main/01%20-%20Getting%20Started/06%20-%20coordinateSystems)   
 ![coordinateSystems](https://github.com/mkillewald/learnOpenGL/blob/main/images/coordinateSystems.png)   
 
-### [07 - camera](https://github.com/mkillewald/learnOpenGL/tree/main/01%20-%20Getting%20Started/056%20-%20camera)   
+### [07 - camera](https://github.com/mkillewald/learnOpenGL/tree/main/01%20-%20Getting%20Started/07%20-%20camera)   
 ![camera](https://github.com/mkillewald/learnOpenGL/blob/main/images/camera.png) 
