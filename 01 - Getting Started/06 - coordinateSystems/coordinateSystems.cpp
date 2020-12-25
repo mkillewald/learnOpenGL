@@ -227,10 +227,7 @@ int main()
         // create view and projection transformations
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection;
-
-        view = glm::translate(view, glm::vec3(0.0f, -2.0f, -5.0f)); // move camera back (out of screen) by moving world objects forward (into screen)
-        view = glm::rotate(view, glm::radians(55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); // move camera back (out of screen) by moving world objects forward (into screen)  
         projection = glm::perspective(glm::radians(45.0f), (SCR_WIDTH*1.0f) / (SCR_HEIGHT*1.0f), 0.1f, 100.0f);  
 
         // pass transforms to shaders
@@ -249,7 +246,10 @@ int main()
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));  // give each box a slightly different starting angle
-            model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f)); // rotate each container over time
+            
+            if (i%3==0) {
+                model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f)); // rotate every third container over time
+            }
 
             // send model matrix to shader
             ourShader.setMat4("model", model);
