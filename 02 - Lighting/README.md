@@ -3,4 +3,7 @@
 
 ### [02 - basicLighting](https://github.com/mkillewald/learnOpenGL/tree/main/02%20-%20Lighting/02%20-%20basicLighting)  
 ###### ambient + diffuse lighting effects
-![ambient+diffuse](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse.png)
+![ambient+diffuse](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse.png)   
+###### ambient + diffuse + specular lighting effects
+![ambient+diffuse+specular](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse+specular.png)
+
