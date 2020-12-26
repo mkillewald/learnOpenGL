@@ -15,7 +15,5 @@ https://github.com/nothings/stb/blob/master/stb_image.h
 GLM 0.9.8   
 https://glm.g-truc.net/0.9.8/index.html
 
-learnopengl Classes   
-Shader (2D) https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h   
-Shader (3D) https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_m.h   
-Camera https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/camera.h
+LearnOpenGL Classes   
+https://github.com/JoeyDeVries/LearnOpenGL/tree/master/includes/learnopengl
