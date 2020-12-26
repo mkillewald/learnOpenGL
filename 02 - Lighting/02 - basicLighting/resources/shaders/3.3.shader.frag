@@ -12,7 +12,7 @@ in vec3 Normal;
 void main()
 {
     // create ambient lighting effect
-    float ambientStrength = 0.1;
+    float ambientStrength = 0.15;
     vec3 ambient = ambientStrength * lightColor;
 
     vec3 norm = normalize(Normal);
@@ -20,13 +20,13 @@ void main()
     // create diffuse lighting effect
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColor;
+    vec3 diffuse = (0.8 * diff) * lightColor;
 
     // create spcular lighting effect
-    float specularStrength = 0.5;
+    float specularStrength = 0.8;
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
     vec3 specular = specularStrength * spec * lightColor;  
 
     // combine all three effects and apply to objectColor
