@@ -181,6 +181,7 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, -1.0f, 0.3f));
 
         // activate lighting shader
         lightingShader.use();
@@ -195,6 +196,9 @@ int main()
         // render container(s)
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // move light source
+        lightPos = glm::vec3(1.5f*sin(glfwGetTime()), 1.5f*sin(glfwGetTime()), 1.5f*cos(glfwGetTime()));
 
         // draw our light source object
         lightCubeShader.use();
