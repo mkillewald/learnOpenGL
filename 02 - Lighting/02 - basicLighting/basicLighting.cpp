@@ -189,7 +189,8 @@ int main()
         lightingShader.setMat4("model", model);
         lightingShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
         lightingShader.setVec3("lightColor",  glm::vec3(1.0f, 1.0f, 1.0f));
-        lightingShader.setVec3("lightPos", lightPos);    
+        lightingShader.setVec3("lightPos", lightPos);
+        lightingShader.setVec3("viewPos", camera.Position);   
         
         // render container(s)
         glBindVertexArray(cubeVAO);
