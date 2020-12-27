@@ -224,6 +224,7 @@ int main()
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f));        
         lightCubeShader.setMat4("model", model);
+        lightCubeShader.setVec3("lightColor", lightColor);
 
         // draw the light cube object
         glBindVertexArray(lightCubeVAO);
