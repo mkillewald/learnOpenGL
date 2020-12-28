@@ -5,5 +5,7 @@
 ###### ambient + diffuse lighting effects
 ![ambient+diffuse](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse.png)   
 ###### ambient + diffuse + specular lighting effects
-![ambient+diffuse+specular](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse+specular.png)
+![ambient+diffuse+specular](https://github.com/mkillewald/learnOpenGL/blob/main/images/ambient+diffuse+specular.png)   
 
+### [03 - materials](https://github.com/mkillewald/learnOpenGL/tree/main/02%20-%20Lighting/01%20-%20materials)   
+![materials](https://github.com/mkillewald/learnOpenGL/blob/main/images/materials.png)   
