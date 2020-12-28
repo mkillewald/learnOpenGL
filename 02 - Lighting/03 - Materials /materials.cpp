@@ -10,6 +10,13 @@
 
 #include <iostream>
 
+struct Material {
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+    float shininess;
+};
+
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -20,7 +27,7 @@ unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 9.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -30,7 +37,8 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+// glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(0.0f, 0.0f, 3.0f);
 
 int main()
 {
@@ -123,6 +131,106 @@ int main()
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
 
+    // material definitions from http://devernay.free.fr/cours/opengl/materials.html
+    Material materials[] = {       
+        {   glm::vec3(0.0215f, 0.1745f, 0.0215f), // [0] emerald
+            glm::vec3(0.07568f,	0.61424f, 0.07568f),
+            glm::vec3(0.633f, 0.727811f, 0.633f),
+            0.6f },
+        {   glm::vec3(0.135f, 0.2225f, 0.1575f), // [1] jade
+            glm::vec3(0.54f, 0.89f, 0.63f),
+            glm::vec3(0.316228f, 0.316228f, 0.316228f),
+            0.1f },
+        {   glm::vec3(0.05375f, 0.05f, 0.06625f), // [2] obsidian
+            glm::vec3(0.18275f, 0.17f, 0.22525f),
+            glm::vec3(0.332741f, 0.328634f, 0.346435f),
+            0.3f },
+        {   glm::vec3(0.25f, 0.20725f, 0.20725f), // [3] pearl
+            glm::vec3(1.0f, 0.829f, 0.829f),
+            glm::vec3(0.296648f, 0.296648f, 0.296648f),
+            0.088f },
+        {   glm::vec3(0.1745f, 0.01175f, 0.01175f), // [4] ruby
+            glm::vec3(0.61424f, 0.04136f, 0.04136f),
+            glm::vec3(0.727811f, 0.626959f, 0.626959f),
+            0.6f },
+        {   glm::vec3(0.1f, 0.18725f, 0.1745f), // [5] turquoise
+            glm::vec3(0.396f, 0.74151f, 0.69102f),
+            glm::vec3(0.297254f, 0.30829f, 0.306678f),
+            0.1f },
+        {   glm::vec3(0.329412f, 0.223529f, 0.027451f), // [6] brass
+            glm::vec3(0.780392f, 0.568627f, 0.113725f),
+            glm::vec3(0.992157f, 0.941176f, 0.807843f),
+            0.21794872f },
+        {   glm::vec3(0.2125f, 0.1275f, 0.054f), // [7] bronze
+            glm::vec3(0.714f, 0.4284f, 0.18144f),
+            glm::vec3(0.393548f, 0.271906f, 0.166721f),
+            0.2f },
+        {   glm::vec3(0.25f, 0.25f, 0.25f), // [8] chrome
+            glm::vec3(0.4f, 0.4f, 0.4f),
+            glm::vec3(0.774597f, 0.774597f, 0.774597f),
+            0.6f },
+        {   glm::vec3(0.19125f, 0.0735f, 0.0225f), // [9] copper
+            glm::vec3(0.7038f, 0.27048f, 0.0828f),
+            glm::vec3(0.256777f, 0.137622f, 0.086014f),
+            0.1f },
+        {   glm::vec3(0.24725f, 0.1995f, 0.0745f), // [10] gold
+            glm::vec3(0.75164f, 0.60648f, 0.22648f),
+            glm::vec3(0.628281f, 0.555802f, 0.366065f),
+            0.4f },
+        {   glm::vec3(0.19225f, 0.19225f, 0.19225f), // [11] silver
+            glm::vec3(0.50754f, 0.50754f, 0.50754f),
+            glm::vec3(0.508273f, 0.508273f, 0.508273f),
+            0.4f },
+        {   glm::vec3(0.0f, 0.0f, 0.0f), // [12] black plastic
+            glm::vec3(0.01f, 0.01f, 0.01f),
+            glm::vec3(0.50f, 0.50f, 0.50f),
+            0.25f },
+        {   glm::vec3(0.0f, 0.1f, 0.06f), // [13] cyan plastic
+            glm::vec3(0.0f, 0.50980392f, 0.50980392f),
+            glm::vec3(0.50196078f, 0.50196078f, 0.50196078f),
+            0.25f },
+        {   glm::vec3(0.0f, 0.0f, 0.0f), // [14] green plastic
+            glm::vec3(0.1f, 0.35f, 0.1f),
+            glm::vec3(0.45f, 0.55f, 0.45f),
+            0.25f },
+        {   glm::vec3(0.0f, 0.0f, 0.0f), // [15] red plastic
+            glm::vec3(0.5f, 0.0f, 0.0f),
+            glm::vec3(0.7f,	0.6f, 0.6f),
+            0.25f },
+        {   glm::vec3(0.0f, 0.0f, 0.0f), // [16] white plastic
+            glm::vec3(0.55f, 0.55f, 0.55f),
+            glm::vec3(0.70f, 0.70f, 0.70f),
+            0.25f },
+        {   glm::vec3(0.0f, 0.0f, 0.0f), // [17] yellow plastic
+            glm::vec3(0.5f, 0.5f, 0.0f),
+            glm::vec3(0.60f, 0.60f, 0.50f),
+            0.25f },
+        {   glm::vec3(0.02f, 0.02f, 0.02f), // [18] black rubber
+            glm::vec3(0.01f, 0.01f, 0.01f),
+            glm::vec3(0.4f, 0.4f, 0.4f),
+            0.078125f },
+        {   glm::vec3(0.0f, 0.05f, 0.05f), // [19] cyan rubber
+            glm::vec3(0.4f, 0.5f, 0.5f),
+            glm::vec3(0.04f, 0.7f, 0.7f),
+            0.078125f },
+        {   glm::vec3(0.0f, 0.05f, 0.0f), // [20] green rubber
+            glm::vec3(0.4f, 0.5f, 0.4f),
+            glm::vec3(0.04f, 0.7f, 0.04f),
+            0.078125f },
+        {   glm::vec3(0.05f, 0.0f, 0.0f), // [21] red rubber
+            glm::vec3(0.5f, 0.4f, 0.4f),
+            glm::vec3(0.7f, 0.04f, 0.04f),
+            0.078125f },
+        {   glm::vec3(0.05f, 0.05f, 0.05f), // [22] white rubber
+            glm::vec3(0.5f, 0.5f, 0.5f),
+            glm::vec3(0.7f, 0.7f, 0.7f),
+            0.078125f },
+        {   glm::vec3(0.05f, 0.05f, 0.0f), // [23] yellow rubber
+            glm::vec3(0.5f, 0.5f, 0.4f),
+            glm::vec3(0.7f, 0.7f, 0.04f),
+            0.078125f },
+    };
+
     // ..:: Initialization code ::..
 
     unsigned int VBO, cubeVAO;
@@ -181,40 +289,66 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
-        //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, -1.0f, 0.3f));
 
         // activate lighting shader
         lightingShader.use();
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
-        lightingShader.setMat4("model", model);
 
-        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        lightingShader.setFloat("material.shininess", 32.0f);
-
-        glm::vec3 lightColor;
-        lightColor.x = sin(glfwGetTime() * 2.0f);
-        lightColor.y = sin(glfwGetTime() * 0.7f);
-        lightColor.z = sin(glfwGetTime() * 1.3f);
-        
-        glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); 
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); 
-        
-        lightingShader.setVec3("light.ambient", ambientColor);
-        lightingShader.setVec3("light.diffuse", diffuseColor);
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
-
+        glm::vec3 lightColor(1.0f);
         lightingShader.setVec3("lightPos", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);   
         
-        // render container(s)
+        // lighting effects for our original cube
+        // lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+        // lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        // lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
+
+        // original cube material effects
+        // lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        // lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        // lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        // lightingShader.setFloat("material.shininess", 32.0f);
+
+        // rotate original cube
+        // model = glm::rotate(model, glm::radians(20.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        // lightingShader.setMat4("model", model);
+
+        // render original cube
         glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // lighting effects for using materials from http://devernay.free.fr/cours/opengl/materials.html
+        lightingShader.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
+
+        int row = 0, col =0;
+        for (int i=0; i < 24; ++i) {
+            lightingShader.setVec3("material.ambient", materials[i].ambient);
+            lightingShader.setVec3("material.diffuse", materials[i].diffuse);
+            lightingShader.setVec3("material.specular", materials[i].specular);
+            lightingShader.setFloat("material.shininess", materials[i].shininess * 128.0f);
+
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(1.5f*(float)(col%6)-3.75f, -1.5f*(float)(row)+2.25f, 0.0f));
+            model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0.4f, 1.0f, 0.0f));
+            lightingShader.setMat4("model", model);
+            
+            // render cube
+            // glBindVertexArray(cubeVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            if (i%6==5) {
+                ++ row;
+                col = 0;
+            } else {
+                ++col;
+            }
+        }
 
         // move light source
-        //lightPos = glm::vec3(1.5f*sin(glfwGetTime()), 1.5f*sin(glfwGetTime()), 1.5f*cos(glfwGetTime()));
+        lightPos = glm::vec3(2.5f*glm::sin(0.5f*glfwGetTime()), 1.7f*glm::cos(0.5f*glfwGetTime()), 3.0f);
 
         // draw our light source object
         lightCubeShader.use();

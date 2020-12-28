@@ -26,8 +26,6 @@ out vec4 FragColor;
 
 void main()
 {    
-
-
     // ambient
     vec3 ambient  = light.ambient * material.ambient;
   	
