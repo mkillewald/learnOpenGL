@@ -195,7 +195,7 @@ float vertices[] = {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load and generate the texture
     stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    data = stbi_load("../resources/textures/container2_specular.png", &width, &height, &nrChannels, 0);  // path relative to binary at run time
+    data = stbi_load("../resources/textures/container2_specular_color.png", &width, &height, &nrChannels, 0);  // path relative to binary at run time
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
