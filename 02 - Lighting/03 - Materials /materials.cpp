@@ -332,7 +332,7 @@ int main()
 
             model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(1.5f*(float)(col%6)-3.75f, -1.5f*(float)(row)+2.25f, 0.0f));
-            model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0.4f, 1.0f, 0.0f));
+            //model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0.4f, 1.0f, 0.0f));
             lightingShader.setMat4("model", model);
             
             // render cube
@@ -348,7 +348,7 @@ int main()
         }
 
         // move light source
-        lightPos = glm::vec3(2.5f*glm::sin(0.5f*glfwGetTime()), 1.7f*glm::cos(0.5f*glfwGetTime()), 3.0f);
+        lightPos = glm::vec3(3.0f*glm::sin(0.5f*glfwGetTime()), 1.7f*glm::cos(0.5f*glfwGetTime()), 3.0f);
 
         // draw our light source object
         lightCubeShader.use();
