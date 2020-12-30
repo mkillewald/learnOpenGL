@@ -14,5 +14,8 @@
 ### [04 - lightingMaps](https://github.com/mkillewald/learnOpenGL/tree/main/02%20-%20Lighting/04%20-%20lightingMaps)  
 ###### diffuse map + basic specular lighting
 ![diffuseMap](https://github.com/mkillewald/learnOpenGL/blob/main/images/diffuseMap.png)   
-###### diffuse map + specular map 
+###### diffuse map + specular map
 ![diffuseMap+specularMap](https://github.com/mkillewald/learnOpenGL/blob/main/images/diffuseMap+specularMap.png)   
+###### diffuse map + specular map + emission map
+![spacer28](https://github.com/mkillewald/learnOpenGL/blob/main/images/spacer28.png)
+![diffuseMap+specularMap+emissionMap400](https://github.com/mkillewald/learnOpenGL/blob/main/images/diffuseMap+specularMap+emissionMap400.gif)   
