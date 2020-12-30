@@ -10,11 +10,14 @@
 
 #include <iostream>
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+static int mini(int x, int y);
+static int maxi(int x, int y);
+GLFWmonitor* get_current_monitor(GLFWwindow *window);
 
 // settings
 unsigned int SCR_WIDTH = 800;
@@ -395,26 +398,6 @@ void processInput(GLFWwindow *window) {
     }
 }
 
-// When you want to handle a key just once, the best solution is to listen to the key callback event instead of 
-// querying the key state in every frame. The key callback is a function that can be hooked into glfw and is called 
-// once for every key event
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
-    {
-        firstMouse = true;
-        if (!glfwGetWindowMonitor(window)) {
-            glfwGetWindowPos(window, &SAVED_XPOS, &SAVED_YPOS);
-            glfwGetWindowSize(window, &SAVED_SCR_WIDTH, &SAVED_SCR_HEIGHT);
-            GLFWmonitor *monitor =  glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-        } else {
-            glfwSetWindowMonitor(window, nullptr, SAVED_XPOS, SAVED_YPOS, SAVED_SCR_WIDTH, SAVED_SCR_HEIGHT, 0);
-        }
-    }
-}
-
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -424,6 +407,26 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
     SCR_WIDTH = width;
     SCR_HEIGHT = height;
+}
+
+// When you want to handle a key press event just once instead of the same key press being detected by multiple frames, 
+// the best solution is to listen to the key callback event instead of querying the key state in every frame. 
+// The key callback is a function that can be hooked into glfw and is called once for every key event
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
+    {
+        firstMouse = true;
+        if (!glfwGetWindowMonitor(window)) {
+            glfwGetWindowPos(window, &SAVED_XPOS, &SAVED_YPOS);
+            glfwGetWindowSize(window, &SAVED_SCR_WIDTH, &SAVED_SCR_HEIGHT);
+            GLFWmonitor *monitor =  get_current_monitor(window); //glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        } else {
+            glfwSetWindowMonitor(window, nullptr, SAVED_XPOS, SAVED_YPOS, SAVED_SCR_WIDTH, SAVED_SCR_HEIGHT, 0);
+        }
+    }
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -444,4 +447,53 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
+}
+
+// source: https://stackoverflow.com/questions/21421074/how-to-create-a-full-screen-window-on-the-current-monitor-with-glfw
+static int mini(int x, int y)
+{
+    return x < y ? x : y;
+}
+
+// source: https://stackoverflow.com/questions/21421074/how-to-create-a-full-screen-window-on-the-current-monitor-with-glfw
+static int maxi(int x, int y)
+{
+    return x > y ? x : y;
+}
+
+// source: https://stackoverflow.com/questions/21421074/how-to-create-a-full-screen-window-on-the-current-monitor-with-glfw
+GLFWmonitor* get_current_monitor(GLFWwindow *window)
+{
+    int nmonitors, i;
+    int wx, wy, ww, wh;
+    int mx, my, mw, mh;
+    int overlap, bestoverlap;
+    GLFWmonitor *bestmonitor;
+    GLFWmonitor **monitors;
+    const GLFWvidmode *mode;
+
+    bestoverlap = 0;
+    bestmonitor = NULL;
+
+    glfwGetWindowPos(window, &wx, &wy);
+    glfwGetWindowSize(window, &ww, &wh);
+    monitors = glfwGetMonitors(&nmonitors);
+
+    for (i = 0; i < nmonitors; i++) {
+        mode = glfwGetVideoMode(monitors[i]);
+        glfwGetMonitorPos(monitors[i], &mx, &my);
+        mw = mode->width;
+        mh = mode->height;
+
+        overlap =
+            maxi(0, mini(wx + ww, mx + mw) - maxi(wx, mx)) *
+            maxi(0, mini(wy + wh, my + mh) - maxi(wy, my));
+
+        if (bestoverlap < overlap) {
+            bestoverlap = overlap;
+            bestmonitor = monitors[i];
+        }
+    }
+
+    return bestmonitor;
 }
