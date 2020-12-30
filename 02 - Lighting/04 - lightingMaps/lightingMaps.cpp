@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -18,6 +19,10 @@ void processInput(GLFWwindow *window);
 // settings
 unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
+int SAVED_SCR_WIDTH = SCR_WIDTH;
+int SAVED_SCR_HEIGHT = SCR_HEIGHT;
+int SAVED_XPOS = 0;
+int SAVED_YPOS = 0;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 6.0f));
@@ -44,7 +49,14 @@ int main()
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
- 
+
+    // get monitor size
+    // GLFWmonitor* MyMonitor =  glfwGetPrimaryMonitor(); // The primary monitor.. Later Occulus?..
+
+    // const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
+    // SCR_WIDTH = mode->width;
+    // SCR_HEIGHT = mode->height;
+
     // glfw window creation
     // --------------------
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
@@ -59,6 +71,7 @@ int main()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -361,9 +374,7 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{   
-    
+void processInput(GLFWwindow *window) {   
     // exit program
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -381,6 +392,26 @@ void processInput(GLFWwindow *window)
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
+}
+
+// When you want to handle a key just once, the best solution is to listen to the key callback event instead of 
+// querying the key state in every frame. The key callback is a function that can be hooked into glfw and is called 
+// once for every key event
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS)
+    {
+        firstMouse = true;
+        if (!glfwGetWindowMonitor(window)) {
+            glfwGetWindowPos(window, &SAVED_XPOS, &SAVED_YPOS);
+            glfwGetWindowSize(window, &SAVED_SCR_WIDTH, &SAVED_SCR_HEIGHT);
+            GLFWmonitor *monitor =  glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        } else {
+            glfwSetWindowMonitor(window, nullptr, SAVED_XPOS, SAVED_YPOS, SAVED_SCR_WIDTH, SAVED_SCR_HEIGHT, 0);
+        }
     }
 }
 
