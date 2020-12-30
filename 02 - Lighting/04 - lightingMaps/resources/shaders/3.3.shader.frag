@@ -26,14 +26,6 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
-float band(float start, float end, float t) {  
-    return step(start, t)*step(t, end);
-}
-
-float rect(vec2 uv, float start) {
-    return band(start, 1.0f-start, TexCoords.x)*band(start, 1.0f-start, TexCoords.y);
-}
-
 void main()
 {    
     // ambient
@@ -60,7 +52,7 @@ void main()
     vec3 emission = emissionMap * (sin(time)*0.5f+0.5f)*2.0;
 
     // emission mask
-    float emissionMask = rect(TexCoords, specularMap.r);
+    vec3 emissionMask = step(vec3(1.0f), vec3(1.0f)-specularMap);
     emission = emission * emissionMask;
     
     vec3 result = ambient + diffuse + specular + emission;
