@@ -17,5 +17,6 @@
 ###### diffuse map + specular map
 ![diffuseMap+specularMap](https://github.com/mkillewald/learnOpenGL/blob/main/images/diffuseMap+specularMap.png)   
 ###### diffuse map + specular map + emission map
+&nbsp;   
 ![spacer28](https://github.com/mkillewald/learnOpenGL/blob/main/images/spacer28.png)
 ![diffuseMap+specularMap+emissionMap400](https://github.com/mkillewald/learnOpenGL/blob/main/images/diffuseMap+specularMap+emissionMap400.gif)   
