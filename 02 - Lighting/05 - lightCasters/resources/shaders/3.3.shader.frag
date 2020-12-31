@@ -56,20 +56,21 @@ void main()
     vec3 specular = light.specular * spec * specularMap;
 
     // emission
-    // vec2 myTexCoords = TexCoords;
-    // myTexCoords.x = myTexCoords.x + 0.045f; // slightly shift texture on x for better alignment
-    // vec3 emissionMap = vec3(texture(material.emission, myTexCoords + vec2(0.0,time*0.75)));
-    // vec3 emission = emissionMap * (sin(time)*0.5f+0.5f)*2.0;
+    vec2 myTexCoords = TexCoords;
+    myTexCoords.x = myTexCoords.x + 0.045f; // slightly shift texture on x for better alignment
+    vec3 emissionMap = vec3(texture(material.emission, myTexCoords + vec2(0.0,time*0.75)));
+    vec3 emission = emissionMap * (sin(time)*0.5f+0.5f)*2.0;
 
     // emission mask
-    // vec3 emissionMask = step(vec3(1.0f), vec3(1.0f)-specularMap);
-    // emission = emission * emissionMask;
+    vec3 emissionMask = step(vec3(1.0f), vec3(1.0f)-specularMap);
+    emission = emission * emissionMask;
     
     // flashlight calculations
     float theta     = dot(lightDir, normalize(-light.direction));
     float epsilon   = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+    //float intensity = smoothstep(0.0, 1.0, (theta - light.outerCutOff) / epsilon);
  
-    vec3 result = intensity * (diffuse + specular) + ambient;
+    vec3 result = intensity * (diffuse + specular - emission*0.4) + ambient + emission;
     FragColor = vec4(result, 1.0f);
 }
