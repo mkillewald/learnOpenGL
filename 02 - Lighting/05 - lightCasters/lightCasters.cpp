@@ -37,6 +37,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// lighting
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 int main()
 {
     // glfw: initialize and configure
@@ -256,7 +259,7 @@ int main()
     }
     stbi_image_free(data);
 
-    lightingShader.use(); // activate the shader before setting uniforms!  
+    lightingShader.use(); // activate the shader before setting uniforms!
     lightingShader.setInt("material.diffuse", 0);
     lightingShader.setInt("material.specular", 1);
     lightingShader.setInt("material.emission", 2);
@@ -296,25 +299,29 @@ int main()
         // create projection and view transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 model(1.0f);
         //model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-        // activate lighting shader
+        glm::vec3 lightColor(1.0f);
+
+        // activate lighting shader and set uniforms
         lightingShader.use();
         lightingShader.setFloat("time", glfwGetTime());
         lightingShader.setMat4("projection", projection);
         lightingShader.setMat4("view", view);
-
-        glm::vec3 lightColor(1.0f);
         lightingShader.setVec3("viewPos", camera.Position);   
-        lightingShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
         
-        // lighting effects
+        // set light properties
+        //lightingShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+        lightingShader.setVec3("light.position", lightPos);
+        lightingShader.setFloat("light.constant",  1.0f);
+        lightingShader.setFloat("light.linear",    0.09f);
+        lightingShader.setFloat("light.quadratic", 0.032f);
         lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
         lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
 
-        // material effects
+        // set material properties
         lightingShader.setFloat("material.shininess", 32.0f);
 
         for(unsigned int i = 0; i < 10; i++) {
@@ -341,14 +348,14 @@ int main()
         //lightPos = glm::vec3(3.0f*glm::sin(0.5f*glfwGetTime()), 1.7f*glm::cos(0.5f*glfwGetTime()), 3.0f);
 
         // draw our light source object
-        // lightCubeShader.use();
-        // lightCubeShader.setMat4("projection", projection);
-        // lightCubeShader.setMat4("view", view);
-        // model = glm::mat4(1.0f);
-        // model = glm::translate(model, lightPos);
-        // model = glm::scale(model, glm::vec3(0.2f));        
-        // lightCubeShader.setMat4("model", model);
-        // lightCubeShader.setVec3("lightColor", lightColor);
+        lightCubeShader.use();
+        lightCubeShader.setMat4("projection", projection);
+        lightCubeShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f));        
+        lightCubeShader.setMat4("model", model);
+        lightCubeShader.setVec3("lightColor", lightColor);
 
         // draw the light cube object
         glBindVertexArray(lightCubeVAO);
