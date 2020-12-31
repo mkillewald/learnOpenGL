@@ -8,7 +8,9 @@ struct Material {
 
 struct Light {
     vec3 position;
-    //vec3 direction;
+    vec3 direction;
+    float cutOff;
+    float outerCutOff;
   
     vec3 ambient;
     vec3 diffuse;
@@ -33,8 +35,8 @@ out vec4 FragColor;
 
 void main()
 {    
-    float distance = length(light.position - FragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    // float distance = length(light.position - FragPos);
+    // float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // ambient
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
@@ -54,15 +56,20 @@ void main()
     vec3 specular = light.specular * spec * specularMap;
 
     // emission
-    vec2 myTexCoords = TexCoords;
-    myTexCoords.x = myTexCoords.x + 0.045f; // slightly shift texture on x for better alignment
-    vec3 emissionMap = vec3(texture(material.emission, myTexCoords + vec2(0.0,time*0.75)));
-    vec3 emission = emissionMap * (sin(time)*0.5f+0.5f)*2.0;
+    // vec2 myTexCoords = TexCoords;
+    // myTexCoords.x = myTexCoords.x + 0.045f; // slightly shift texture on x for better alignment
+    // vec3 emissionMap = vec3(texture(material.emission, myTexCoords + vec2(0.0,time*0.75)));
+    // vec3 emission = emissionMap * (sin(time)*0.5f+0.5f)*2.0;
 
     // emission mask
-    vec3 emissionMask = step(vec3(1.0f), vec3(1.0f)-specularMap);
-    emission = emission * emissionMask;
+    // vec3 emissionMask = step(vec3(1.0f), vec3(1.0f)-specularMap);
+    // emission = emission * emissionMask;
     
-    vec3 result = attenuation * (ambient + diffuse + specular);// + emission;
+    // flashlight calculations
+    float theta     = dot(lightDir, normalize(-light.direction));
+    float epsilon   = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+ 
+    vec3 result = intensity * (diffuse + specular) + ambient;
     FragColor = vec4(result, 1.0f);
 }
