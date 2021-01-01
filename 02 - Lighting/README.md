@@ -24,3 +24,7 @@
 ### [05 - lightCasters](https://github.com/mkillewald/learnOpenGL/tree/main/02%20-%20Lighting/05%20-%20lightCasters)   
 ###### flashlight
 ![flashlight](https://github.com/mkillewald/learnOpenGL/blob/main/images/flashlight.png)   
+
+### [06 - multipleLights](https://github.com/mkillewald/learnOpenGL/tree/main/02%20-%20Lighting/06%20-%20multipleLights)   
+###### directional light, 4 point lights, and flashlight
+![multipleLights](https://github.com/mkillewald/learnOpenGL/blob/main/images/multipleLights.png)   
