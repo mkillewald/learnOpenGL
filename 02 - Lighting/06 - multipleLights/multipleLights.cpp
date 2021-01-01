@@ -20,7 +20,7 @@ static int maxi(int x, int y);
 GLFWmonitor* get_current_monitor(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
 
-// settings
+// window settings
 unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
 int SAVED_SCR_WIDTH = SCR_WIDTH;
@@ -37,9 +37,6 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-// lighting
-//glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
