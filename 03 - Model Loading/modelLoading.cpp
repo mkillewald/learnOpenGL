@@ -83,7 +83,7 @@ int main()
     }
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
+    // stbi_set_flip_vertically_on_load(true);
 
     // configure global opengl state
     // -----------------------------
@@ -96,7 +96,11 @@ int main()
 
     // load models
     // -----------
-    Model ourModel("../resources/models/backpack/backpack.obj");
+    stbi_set_flip_vertically_on_load(true);
+    Model backpackModel("../resources/models/backpack/backpack.obj");
+    
+    stbi_set_flip_vertically_on_load(false);
+    Model r2d2Model("../resources/models/r2d2-low-poly/r2d2-low-poly.obj");
     //Model cubeModel("../resources/models/cube/cube.obj");
 
     glm::vec3 pointLightPositions[] = {
@@ -129,8 +133,6 @@ int main()
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        
 
         // activate lighting shader and set uniforms
         ourShader.use();
@@ -178,12 +180,19 @@ int main()
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
 
-        // render the loaded model
+        // render the backpack model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
-        ourModel.Draw(ourShader);
+        backpackModel.Draw(ourShader);
+
+        // render the r2d2 model
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(8.0f, -2.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));	// it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        r2d2Model.Draw(ourShader);
 
         // draw our point lights
         // lightCubeShader.use();
