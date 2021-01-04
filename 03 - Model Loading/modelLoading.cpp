@@ -82,9 +82,6 @@ int main()
         return -1;
     }
 
-    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    // stbi_set_flip_vertically_on_load(true);
-
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
@@ -96,9 +93,10 @@ int main()
 
     // load models
     // -----------
+    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
     Model backpackModel("../resources/models/backpack/backpack.obj");
-    
+
     stbi_set_flip_vertically_on_load(false);
     Model r2d2Model("../resources/models/r2d2-low-poly/r2d2-low-poly.obj");
     //Model cubeModel("../resources/models/cube/cube.obj");
