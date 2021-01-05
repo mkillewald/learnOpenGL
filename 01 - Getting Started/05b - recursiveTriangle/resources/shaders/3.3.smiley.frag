@@ -25,7 +25,7 @@ uniform float u_time;
 
 // normalize t to be a value between 0.0 and 1.0
 // if t==a return 0.0
-// if a < t < b return value sudh that 0.0 < t > 1.0
+// if a < t < b return value such that 0.0 < t > 1.0
 // if t==b return 1.0
 float remap01(float a, float b, float t) {
     return sat((t-a) / (b-a));
