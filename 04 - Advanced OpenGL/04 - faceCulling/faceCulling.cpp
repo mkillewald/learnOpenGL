@@ -235,6 +235,8 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
+        // glCullFace(GL_FRONT); // default is GL_BACK
+        // glFrontFace(GL_CW); // default is GL_CCW
 
         shader.use();
         glm::mat4 model = glm::mat4(1.0f);
