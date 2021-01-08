@@ -11,8 +11,8 @@
 ### [04 - faceCulling](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/04%20-%20faceCulling)    
 ##### back face culling   
 ![backFaceCulling456](https://github.com/mkillewald/learnOpenGL/blob/main/images/backFaceCulling456.png)   
-##### front face culling applied to cubes and ground (face culling is disabled on the windows since we want them to be double sided)    
-![frontFaceCulling456](https://github.com/mkillewald/learnOpenGL/blob/main/images/frontFaceCulling456.png)  
+##### front face culling applied to cubes and ground (face culling is disabled on the windows since we want them to be double sided)
 ![spacer28](https://github.com/mkillewald/learnOpenGL/blob/main/images/spacer28.png)
 [click to view larger image](https://github.com/mkillewald/learnOpenGL/blob/main/images/frontFaceCulling600.png)  
+![frontFaceCulling456](https://github.com/mkillewald/learnOpenGL/blob/main/images/frontFaceCulling456.png)  
 
