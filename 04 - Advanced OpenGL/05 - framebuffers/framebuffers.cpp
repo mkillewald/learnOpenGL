@@ -150,15 +150,28 @@ int main()
         -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, // top left
         -0.5f, -0.5f,  0.0f,  0.0f, 0.0f, // bottom left
     };
+    // float quadVertices[] = {  
+    //     // positions   // texCoords // CCW
+    //     -1.0f,  1.0f,  0.0f, 1.0f,  // top left
+    //     -1.0f, -1.0f,  0.0f, 0.0f,  // bottom left
+    //      1.0f, -1.0f,  1.0f, 0.0f,  // bottom right
+
+    //     -1.0f,  1.0f,  0.0f, 1.0f,  // top left
+    //      1.0f, -1.0f,  1.0f, 0.0f,  // bottom right 
+    //      1.0f,  1.0f,  1.0f, 1.0f   // top right
+    // };	
+
+    // We will be using this quad to mirror our scene in a frame buffer, so we've adjusted vertex positions
+    // to make the quad smaller than our view, and flipped texCoords left and right 
     float quadVertices[] = {  
         // positions   // texCoords // CCW
-        -1.0f,  1.0f,  0.0f, 1.0f,  // top left
-        -1.0f, -1.0f,  0.0f, 0.0f,  // bottom left
-         1.0f, -1.0f,  1.0f, 0.0f,  // bottom right
+        -0.5f,  1.0f,  1.0f, 1.0f,  // top left vertex / top right texCoord
+        -0.5f,  0.5f,  1.0f, 0.0f,  // bottom left vertex / bottom right texCoord
+         0.5f,  0.5f,  0.0f, 0.0f,  // bottom right vertex / bottom left texCoord
 
-        -1.0f,  1.0f,  0.0f, 1.0f,  // top left
-         1.0f, -1.0f,  1.0f, 0.0f,  // bottom right 
-         1.0f,  1.0f,  1.0f, 1.0f   // top right
+        -0.5f,  1.0f,  1.0f, 1.0f,  // top left vertex / top right texCoord
+         0.5f,  0.5f,  0.0f, 0.0f,  // bottom right vertex / top left texCoord
+         0.5f,  1.0f,  0.0f, 1.0f   // top right vertex / top left texCoord
     };	
 
     // window locations
@@ -289,17 +302,28 @@ int main()
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
         glEnable(GL_CULL_FACE);
+        // glCullFace(GL_FRONT); // default is GL_BACK
+        // glFrontFace(GL_CW); // default is GL_CCW
 
         // clear the frame buffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // glCullFace(GL_FRONT); // default is GL_BACK
-        // glFrontFace(GL_CW); // default is GL_CCW
 
-        // draw our scene
+        // draw our scene as mirror texture
         shader.use();
         glm::mat4 model = glm::mat4(1.0f);
+
+        //rotate camera 180 degrees for view matrix of mirror
+        camera.Yaw += 180.0f;
+        camera.Pitch = -camera.Pitch;
+        camera.ProcessMouseMovement(0, 0, false); // call this to update camera vectors
         glm::mat4 view = camera.GetViewMatrix();
+
+        // reset camera back to normal
+        camera.Yaw -= 180.0f;
+        camera.Pitch = -camera.Pitch;
+        camera.ProcessMouseMovement(0, 0, true);
+
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
@@ -334,12 +358,51 @@ int main()
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // clear the frame buffer
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // draw our scene again
+        shader.use();
+        model = glm::mat4(1.0f);
+        view = camera.GetViewMatrix();
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        shader.setMat4("view", view);
+        shader.setMat4("projection", projection);
+        // cubes
+        glBindVertexArray(cubeVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture); 	
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        shader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // floor
+        glBindVertexArray(planeVAO);
+        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        shader.setMat4("model", glm::mat4(1.0f));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+        // draw windows from furthest to nearest
+        glDisable(GL_CULL_FACE);
+        glBindVertexArray(vertPlaneVAO);
+        glBindTexture(GL_TEXTURE_2D, windowTexture);
+        for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, it->second);
+            shader.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+        }
+
         glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
         glDisable(GL_CULL_FACE);
-        // clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
-        glClear(GL_COLOR_BUFFER_BIT);
 
+        // draw the quad
         screenShader.use();
         glBindVertexArray(quadPlaneVAO);
         glBindTexture(GL_TEXTURE_2D, texColorBuffer);	// use the color attachment texture as the texture of the quad plane
