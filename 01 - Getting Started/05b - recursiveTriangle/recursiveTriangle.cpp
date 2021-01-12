@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <learnopengl/shader_m.h>
-#include <stb_image/stb_image.h>
+#include <stb/stb_image.h>
 
 #include <iostream>
 
