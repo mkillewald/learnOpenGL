@@ -21,5 +21,5 @@
 ![postProcessingSharpen456](https://github.com/mkillewald/learnOpenGL/blob/main/images/postProcessingSharpen456.png)   
 ##### post-processing blur
 ![postProcessingBlur456](https://github.com/mkillewald/learnOpenGL/blob/main/images/postProcessingBlur456.png)  
-##### "rear view mirror" using framebuffer
+##### rear view mirror
 ![mirroredFramebuffer456](https://github.com/mkillewald/learnOpenGL/blob/main/images/mirroredFramebuffer456.png)  
