@@ -23,3 +23,9 @@
 ![postProcessingBlur456](https://github.com/mkillewald/learnOpenGL/blob/main/images/postProcessingBlur456.png)  
 ##### rear view mirror
 ![mirroredFramebuffer456](https://github.com/mkillewald/learnOpenGL/blob/main/images/mirroredFramebuffer456.png)  
+
+### [06 - cubeMaps](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/06%20-%20cubeMaps)    
+##### skybox  
+![skybox456](https://github.com/mkillewald/learnOpenGL/blob/main/images/skybox456.png)  
+##### cube reflects skybox  
+![reflectionCube456](https://github.com/mkillewald/learnOpenGL/blob/main/images/reflectionCube456.png)  
