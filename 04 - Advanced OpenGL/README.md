@@ -29,3 +29,5 @@
 ![skybox456](https://github.com/mkillewald/learnOpenGL/blob/main/images/skybox456.png)  
 ##### cube reflects skybox  
 ![reflectionCube456](https://github.com/mkillewald/learnOpenGL/blob/main/images/reflectionCube456.png)  
+##### cube refracts skybox  
+![refractionCube456](https://github.com/mkillewald/learnOpenGL/blob/main/images/refractionCube456.png)  
