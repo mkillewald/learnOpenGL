@@ -83,6 +83,7 @@ int main()
     Shader shader("../resources/shaders/3.blending.vs", "../resources/shaders/3.blending.fs");
     Shader skyboxShader("../resources/shaders/6.skybox.vs", "../resources/shaders/6.skybox.fs");
     Shader reflectionShader("../resources/shaders/6.reflection.vs", "../resources/shaders/6.reflection.fs");
+    Shader refractionShader("../resources/shaders/6.reflection.vs", "../resources/shaders/6.refraction.fs");
     
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -334,6 +335,9 @@ int main()
     reflectionShader.use();
     reflectionShader.setInt("skybox", 0);
 
+    refractionShader.use();
+    refractionShader.setInt("skybox", 0);
+
     // render loop
     // -----------
     while(!glfwWindowShouldClose(window))
@@ -361,7 +365,7 @@ int main()
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glEnable(GL_CULL_FACE);
+        // glEnable(GL_CULL_FACE);
 
         // draw scene
         shader.use();
@@ -370,19 +374,26 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
-        // 1st cube
-        glBindVertexArray(cubeVAO);
+        // 1st cube (refraction)
+        refractionShader.use();
+        glBindVertexArray(reflectedCubeVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture); 	
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        shader.setMat4("model", model);
+        refractionShader.setMat4("model", model);
+        reflectionShader.setMat4("view", view);
+        reflectionShader.setMat4("projection", projection);
+        reflectionShader.setVec3("cameraPos", camera.Position);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        
         // floor
         // glBindVertexArray(planeVAO);
         // glBindTexture(GL_TEXTURE_2D, floorTexture);
         // shader.setMat4("model", glm::mat4(1.0f));
         // glDrawArrays(GL_TRIANGLES, 0, 6);
         // glBindVertexArray(0);
+
         // 2nd cube (reflects skybox)
         reflectionShader.use();
         glBindVertexArray(reflectedCubeVAO);
@@ -393,7 +404,7 @@ int main()
         reflectionShader.setMat4("view", view);
         reflectionShader.setMat4("projection", projection);
         reflectionShader.setVec3("cameraPos", camera.Position);
-        glDisable(GL_CULL_FACE);
+        // glDisable(GL_CULL_FACE);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         // draw skybox
         glDepthFunc(GL_LEQUAL);
@@ -409,7 +420,7 @@ int main()
         glBindVertexArray(0);
         glDepthFunc(GL_LESS);
         // draw windows from furthest to nearest
-        glDisable(GL_CULL_FACE);
+        // glDisable(GL_CULL_FACE);
         glBindVertexArray(vertPlaneVAO);
         glBindTexture(GL_TEXTURE_2D, windowTexture);
         shader.use();
