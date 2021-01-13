@@ -302,25 +302,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
 
-        // draw skybox
-        glDepthMask(GL_FALSE);
-        skyboxShader.use();
-        // we ignore tranlsation part of view matrix by converting to 3x3 and back to 4x4 matrix
-        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); 
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        skyboxShader.setMat4("view", view);
-        skyboxShader.setMat4("projection", projection);
-        glBindVertexArray(skyboxVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-        glDepthMask(GL_TRUE);
-
         // draw scene
         shader.use();
         glm::mat4 model = glm::mat4(1.0f);
-        view = camera.GetViewMatrix();
+        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
         // cubes
@@ -340,10 +326,26 @@ int main()
         shader.setMat4("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+
+        // draw skybox
+        glDepthFunc(GL_LEQUAL);
+        skyboxShader.use();
+        // we ignore tranlsation part of view matrix by converting to 3x3 and back to 4x4 matrix
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix())); 
+        skyboxShader.setMat4("view", view);
+        skyboxShader.setMat4("projection", projection);
+        glBindVertexArray(skyboxVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDepthFunc(GL_LESS);
+
         // draw windows from furthest to nearest
         glDisable(GL_CULL_FACE);
         glBindVertexArray(vertPlaneVAO);
         glBindTexture(GL_TEXTURE_2D, windowTexture);
+        shader.use();
         for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
         {
             model = glm::mat4(1.0f);
