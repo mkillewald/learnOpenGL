@@ -17,9 +17,9 @@
 [click to view larger image](https://github.com/mkillewald/learnOpenGL/blob/main/images/frontFaceCulling600.png)  
 
 ### [05 - framebuffers](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/05%20-%20framebuffers)    
-##### post-processing sharpen   
+##### post-processing sharpen kernel effect   
 ![postProcessingSharpen456](https://github.com/mkillewald/learnOpenGL/blob/main/images/postProcessingSharpen456.png)   
-##### post-processing blur
+##### post-processing blur kernel effect
 ![postProcessingBlur456](https://github.com/mkillewald/learnOpenGL/blob/main/images/postProcessingBlur456.png)  
-##### mirrored framebuffer
+##### rear view mirror
 ![mirroredFramebuffer456](https://github.com/mkillewald/learnOpenGL/blob/main/images/mirroredFramebuffer456.png)  
