@@ -82,11 +82,14 @@ int main()
     // -------------------------
     Shader shader("../resources/shaders/3.blending.vs", "../resources/shaders/3.blending.fs");
     Shader skyboxShader("../resources/shaders/6.skybox.vs", "../resources/shaders/6.skybox.fs");
+    Shader reflectionShader("../resources/shaders/6.reflection.vs", "../resources/shaders/6.reflection.fs");
+    
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float cubeVertices[] = {
         // back face (CCW winding)
+        // positions          // texture coords
          0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
         -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right
         -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
@@ -131,7 +134,7 @@ int main()
     };
     float horizPlaneVertices[] = {
         // CCW winding
-        // positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
+        // positions          // texture coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
         -5.0f, -0.5f,  5.0f,  0.0f, 0.0f, // bottom left
          5.0f, -0.5f,  5.0f,  2.0f, 0.0f, // bottom right
          5.0f, -0.5f, -5.0f,  2.0f, 2.0f, // top right
@@ -142,7 +145,7 @@ int main()
     };
     float vertPlaneVertices[] = {
         // CCW winding
-        // positions          // texture Coords
+        // positions          // texture coords
         -0.5f, -0.5f,  0.0f,  0.0f, 0.0f, // bottom left
          0.5f, -0.5f,  0.0f,  1.0f, 0.0f, // bottom right
          0.5f,  0.5f,  0.0f,  1.0f, 1.0f, // top right
@@ -195,6 +198,50 @@ int main()
         -1.0f, -1.0f,  1.0f,
         1.0f, -1.0f,  1.0f
     };
+    float reflectedCubeVertices[] = {
+        // positions          // normals
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    };
 
     // window locations
     vector<glm::vec3> windows;
@@ -246,6 +293,17 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // reflected cube VAO
+    unsigned int reflectedCubeVAO, reflectedCubeVBO;
+    glGenVertexArrays(1, &reflectedCubeVAO);
+    glGenBuffers(1, &reflectedCubeVBO);
+    glBindVertexArray(reflectedCubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, reflectedCubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(reflectedCubeVertices), &reflectedCubeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
     // load textures
     // -------------
@@ -272,6 +330,9 @@ int main()
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0);
+
+    reflectionShader.use();
+    reflectionShader.setInt("skybox", 0);
 
     // render loop
     // -----------
@@ -309,24 +370,31 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
-        // cubes
+        // 1st cube
         glBindVertexArray(cubeVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, cubeTexture); 	
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        // floor
+        // glBindVertexArray(planeVAO);
+        // glBindTexture(GL_TEXTURE_2D, floorTexture);
+        // shader.setMat4("model", glm::mat4(1.0f));
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glBindVertexArray(0);
+        // 2nd cube (reflects skybox)
+        reflectionShader.use();
+        glBindVertexArray(reflectedCubeVAO);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        shader.setMat4("model", model);
+        reflectionShader.setMat4("model", model);
+        reflectionShader.setMat4("view", view);
+        reflectionShader.setMat4("projection", projection);
+        reflectionShader.setVec3("cameraPos", camera.Position);
+        glDisable(GL_CULL_FACE);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        // floor
-        glBindVertexArray(planeVAO);
-        glBindTexture(GL_TEXTURE_2D, floorTexture);
-        shader.setMat4("model", glm::mat4(1.0f));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);
-
         // draw skybox
         glDepthFunc(GL_LEQUAL);
         skyboxShader.use();
@@ -340,7 +408,6 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
         glDepthFunc(GL_LESS);
-
         // draw windows from furthest to nearest
         glDisable(GL_CULL_FACE);
         glBindVertexArray(vertPlaneVAO);
