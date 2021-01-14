@@ -31,3 +31,10 @@
 ![reflectionCube456](https://github.com/mkillewald/learnOpenGL/blob/main/images/reflectionCube456.png)  
 ##### cube refracts skybox  
 ![refractionCube456](https://github.com/mkillewald/learnOpenGL/blob/main/images/refractionCube456.png)  
+
+### [08 - advancedGLSL](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/08%20-%20advancedGLSL)       
+![advancedGLSL456](https://github.com/mkillewald/learnOpenGL/blob/main/images/advancedGLSL456.png)  
+
+### [09 - geometryShader](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/09%20-%20geometryShader)    
+##### exploding nanosuit  
+![explodingFragments456](https://github.com/mkillewald/learnOpenGL/blob/main/images/explodingFragments456.png)  
