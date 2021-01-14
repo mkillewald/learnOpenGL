@@ -38,3 +38,5 @@
 ### [09 - geometryShader](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/09%20-%20geometryShader)    
 ##### exploding nanosuit  
 ![explodingFragments456](https://github.com/mkillewald/learnOpenGL/blob/main/images/explodingFragments456.png)  
+##### visualizing normals
+![visualizeNormals456](https://github.com/mkillewald/learnOpenGL/blob/main/images/visualizeNormals456.png)  
