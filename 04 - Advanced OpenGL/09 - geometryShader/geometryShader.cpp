@@ -75,7 +75,9 @@ int main()
 
     // build and compile shaders
     // -------------------------
-    Shader shader("../resources/shaders/9.geometry_shader.vs", "../resources/shaders/9.geometry_shader.fs", "../resources/shaders/9.geometry_shader.gs");
+    // Shader shader("../resources/shaders/9.geometry_shader.vs", "../resources/shaders/9.geometry_shader.fs", "../resources/shaders/9.geometry_shader.gs");
+    Shader shader("../resources/shaders/9.geometry_shader_default.vs", "../resources/shaders/9.geometry_shader_default.fs");
+    Shader normalShader("../resources/shaders/9.geometry_shader_normals.vs", "../resources/shaders/9.geometry_shader_normals.fs", "../resources/shaders/9.geometry_shader_normals.gs");
 
     // load models
     // -----------
@@ -114,6 +116,14 @@ int main()
 
         // draw model
         nanosuit.Draw(shader);
+
+        // then draw model with normal visualizing geometry shader
+        normalShader.use();
+        normalShader.setMat4("projection", projection);
+        normalShader.setMat4("view", view);
+        normalShader.setMat4("model", model);
+
+        nanosuit.Draw(normalShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
