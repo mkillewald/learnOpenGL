@@ -112,15 +112,24 @@ int main()
             translation.y = (float)y / 10.0f + offset;
             translations[index++] = translation;
         }
-    } 
+    }
+
+    // instance VBO
+    unsigned int instanceVBO;
+    glGenBuffers(1, &instanceVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);	
+    glVertexAttribDivisor(2, 1);
 
     // shader configuration
     // --------------------
     shader.use();
-    for(unsigned int i = 0; i < 100; i++)
-    {
-        shader.setVec2("offsets[" + std::to_string(i) + "]", translations[i]);
-    }
   
     // render loop
     // -----------
@@ -142,15 +151,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw instanced quads
-        glBindVertexArray(quadVAO);
         shader.use();
-        // glm::mat4 model = glm::mat4(1.0f);
-        // model = glm::translate(model, glm::vec3(-0.75f, 0.75f, 0.0f)); // move top-left
-        // glm::mat4 view = camera.GetViewMatrix();
-        // glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        // shader.setMat4("model", model);
-        // shader.setMat4("view", view);
-        // shader.setMat4("projection", projection);
+        glBindVertexArray(quadVAO);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
