@@ -40,3 +40,6 @@
 ![explodingFragments456](https://github.com/mkillewald/learnOpenGL/blob/main/images/explodingFragments456.png)  
 ##### visualizing normals
 ![visualizeNormals456](https://github.com/mkillewald/learnOpenGL/blob/main/images/visualizeNormals456.png)  
+
+### [10 - instancing](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/10%20-%20instancing)    
+![asteroids456](https://github.com/mkillewald/learnOpenGL/blob/main/images/asteroids456.png)  
