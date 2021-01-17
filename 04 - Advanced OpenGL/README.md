@@ -43,3 +43,9 @@
 
 ### [10 - instancing](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/10%20-%20instancing)    
 ![asteroids456](https://github.com/mkillewald/learnOpenGL/blob/main/images/asteroids456.png)  
+
+### [11 - antiAliasing](https://github.com/mkillewald/learnOpenGL/tree/main/04%20-%20Advanced%20OpenGL/09%20-%20antiAliasing)    
+##### no anti-aliasing   
+![noAntiAliasing456](https://github.com/mkillewald/learnOpenGL/blob/main/images/noAntiAliasing456.png)  
+##### MSAA anti-aliasing
+![msaaAntiAliasing456](https://github.com/mkillewald/learnOpenGL/blob/main/images/msaaAntiAliasing456.png)  
