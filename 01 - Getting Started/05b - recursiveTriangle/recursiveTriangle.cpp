@@ -100,7 +100,7 @@ int main()
     glEnableVertexAttribArray(2);
 
     // load and create textures
-    unsigned int texture1, texture2;
+    unsigned int texture1;
 
     // texture 1
     glGenTextures(1, &texture1);
@@ -161,8 +161,6 @@ int main()
         // bind textures
         glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1); // activate the texture unit first before binding texture
-        glBindTexture(GL_TEXTURE_2D, texture2);
 
         // transform and draw
         glBindVertexArray(VAO);
